@@ -10,13 +10,13 @@ export const getMovies = async () => {
     });
 
     if (!response.ok) {
-      throw new error("Network response was not ok");
+      throw new Error("Network response was not ok");
     }
 
     if (response.status === 200) {
       return await response.json();
     } else {
-      console.lo("No movies found");
+      console.log("No movies found");
       return undefined;
     }
   } catch (error) {
