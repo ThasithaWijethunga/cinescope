@@ -70,7 +70,7 @@ export function LoginForm() {
           onSuccess: () => {
             setLoading(false);
             // Handle successful login, e.g., redirect to dashboard
-            redirect("/dashboard");
+            redirect("/admin");
             
           },
           onError: (ctx) => {
