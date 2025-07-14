@@ -15,15 +15,18 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createMovie } from "@/actions/movies";
+import { getAllYears } from "@/lib/utils";
 
 export default function AddMovieForm({ onClose }) {
+  const years = getAllYears();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Controlled state
   // const [selectedYear, setSelectedYear] = useState("");
   // const [selectedGenre, setSelectedGenre] = useState("");
 
-   const handleClose = () => {
+  const handleClose = () => {
     // setSelectedYear(null);
     // setSelectedGenre(null);
     onClose(false);
@@ -73,8 +76,6 @@ export default function AddMovieForm({ onClose }) {
 
   // console.log("selectedyear",selectedYear);
 
- 
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
@@ -97,9 +98,9 @@ export default function AddMovieForm({ onClose }) {
             </SelectTrigger>
             <SelectContent>
               {/* <SelectItem value={null}>Please select year</SelectItem> */}
-              <SelectItem value="2005">2005</SelectItem>
-              <SelectItem value="2004">2004</SelectItem>
-              <SelectItem value="2003">2003</SelectItem>
+              {years.map((year, key) => (
+                <SelectItem key={year}value={year}>{year}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
