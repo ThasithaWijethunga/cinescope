@@ -13,7 +13,7 @@ export default function AdminLayout({children}) {
                 <div className="flex h-16 items-center  justify-between px-4">
                    <h1 className="text-xl font-bold">Admin Dashboard</h1>
                    <div className="bg-red-600 rounded-full h-10 w-10 flex items-center justify-center">
-                     HS
+                     TW
                    </div>
                 </div>
                </header>
