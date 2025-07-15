@@ -1,6 +1,7 @@
-'use server';
+"use server";
 
 import { db } from "@/lib/db";
+import { ObjectId } from "mongodb";
 
 //get all movies action
 export const getMovies = async () => {
@@ -30,23 +31,77 @@ export const getMovies = async () => {
   }
 };
 
-
 //create movie action
-export const createMovie = async(movie) => {
-  try{
+export const createMovie = async (movie) => {
+  try {
     const result = await db.collection("movies_n").insertOne(movie);
 
-    if (result.acknowledged){
-      console.log(`A movie was inserted with the _id: ${result.insertedId}`)
+    if (result.acknowledged) {
+      console.log(`A movie was inserted with the _id: ${result.insertedId}`);
 
       return {
         success: true,
-        message: "Movie Created Successfully"
+        message: "Movie Created Successfully",
       };
-    }else{
+    } else {
       return undefined;
     }
-  }catch{
-     console.log("mongodb insert fail");
+  } catch {
+    console.log("mongodb insert fail");
   }
-}; 
+};
+
+//update movie action
+export const updateMovie = async (movieId, movieDoc) => {
+  try {
+    // console.log("Updating movie with id:", movieId);
+    // console.log("MovieDoc:", movieDoc);
+
+    const result = await db
+      .collection("movies_n")
+      .updateOne(
+        { _id: ObjectId.createFromHexString(movieId) },
+        { $set: movieDoc },
+        { upsert: true }
+      );
+
+    if (result.acknowledged) {
+      // console.log(`A movie was inserted with the _id: ${result.updatedId}`);
+
+      return {
+        success: true,
+        message: "Movie Updated Successfully",
+      };
+    } else {
+      return undefined;
+    }
+  } catch (err) {
+    // console.log("mongodb update fail");
+    console.log("mongodb update fail", err);
+  }
+};
+
+//delete movie action
+export const deleteMovie = async (movieId) => {
+  try {
+    // console.log("Updating movie with id:", movieId);
+
+    const result = await db
+      .collection("movies_n")
+      .deleteOne({ _id: ObjectId.createFromHexString(movieId) });
+
+    if (result.acknowledged) {
+      // console.log(`A movie was inserted with the _id: ${result.updatedId}`);
+
+      return {
+        success: true,
+        message: "Movie deleted Successfully",
+      };
+    } else {
+      return undefined;
+    }
+  } catch {
+    // console.log("mongodb update fail");
+    console.log("mongodb delete fail");
+  }
+};

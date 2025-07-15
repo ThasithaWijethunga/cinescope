@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -23,8 +25,59 @@ import {
 import { MOVIES } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import UpdateMovieDialog from "./update-movie-dialog";
+import DeleteMovieDialog from "./delete-movie-dialog";
+import { deleteMovie } from "@/actions/movies";
 
-export default function MovieTable({movies}) {
+export default function MovieTable({ movies }) {
+
+  const router = useRouter();
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const toggleUpdateDialog = (open) => {
+    // Using requestAnimationFrame to ensure the dialog opens after the state update
+    // console.log("open ", open);
+    // console.log("showUpdateDialog before", showUpdateDialog);
+    requestAnimationFrame(() => setShowUpdateDialog(open || !showUpdateDialog));
+    // console.log("showUpdateDialog after" , showUpdateDialog);
+    // setTimeout(() => {
+    //   console.log("showUpdateDialog after", showUpdateDialog);
+    // }, 3000);
+
+    // console.log("open " , open);
+    // console.log("showUpdateDialog before" , showUpdateDialog);
+    // setShowUpdateDialog(open || !showUpdateDialog);
+    // setTimeout(() => {console.log("showUpdateDialog after" , showUpdateDialog)},3000);
+  };
+
+  const toggleDeleteDialog = (open) => {
+    requestAnimationFrame(() => setShowDeleteDialog(open || !showDeleteDialog));
+  }
+
+  const handleDeleteMovie = async(movieId) => {
+    const resp = await deleteMovie(movieId);
+    if(resp?.success){
+      setSelectedMovie(null);
+      toggleDeleteDialog(false);
+      router.refresh();
+    }
+  } 
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "published":
+        return "bg-green-100 text-green-800";
+      case "draft":
+        return "bg-yellow-100 text-yellow-800";
+      case "archived":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-grey-100 text-grey-800";
+    }
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -67,9 +120,14 @@ export default function MovieTable({movies}) {
                   ))}
                 </div>
               </TableCell>
-              <TableCell>{movie.rating}</TableCell>
+              <TableCell>{Number(movie.imdb?.rating).toFixed(1)}</TableCell>
+
+              {/* {console.log("movie rating : ", key + 1, movie.imdb?.rating)} */}
+
               <TableCell className="capitalize">
-                <Badge>{movie.status}</Badge>
+                <Badge className={getStatusClass(movie.status)}>{movie.status}</Badge>
+
+                {/* {console.log("movie status : ", key + 1, movie.status)} */}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
@@ -83,9 +141,20 @@ export default function MovieTable({movies}) {
                     <DropdownMenuLabel>Movie Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>View Details</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSelectedMovie(movie);
+                        toggleUpdateDialog(true);
+                      }}
+                    >
+                      Edit
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">
+                    <DropdownMenuItem className="text-destructive"
+                    onClick={() => {
+                        setSelectedMovie(movie);
+                        toggleDeleteDialog(true);
+                      }}>
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -95,6 +164,21 @@ export default function MovieTable({movies}) {
           ))}
         </TableBody>
       </Table>
+
+      <UpdateMovieDialog
+        open={showUpdateDialog}
+        onOpenChange={toggleUpdateDialog}
+        movie={selectedMovie}
+      />
+
+      <DeleteMovieDialog
+        open={showDeleteDialog}
+        onOpenChange={toggleDeleteDialog}
+        movie={selectedMovie}
+        // onConfirm={(id) => console.log("delete ",id)}
+        onConfirm={handleDeleteMovie}
+        // isLoading={true}
+      />
     </div>
   );
 }
