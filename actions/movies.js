@@ -31,6 +31,29 @@ export const getMovies = async () => {
   }
 };
 
+//get movie  by ID action
+export const getMovieById = async (movieId) => {
+  try {
+    const result = await db
+      .collection("movies")
+      .findOne({ _id: ObjectId.createFromHexString(movieId) });
+
+    if (result && Object.keys(result).length > 0) {
+      console.log(`A movie found with the _id ${result._id}`);
+      return {
+        success: true,
+        message: "movie fetched successfully",
+        data: result,
+      };
+    } else {
+      return undefined;
+    }
+  } catch {
+    // console.log("mongodb update fail");
+    console.log("mongodb fetch fail");
+  }
+};
+
 //create movie action
 export const createMovie = async (movie) => {
   try {
@@ -84,8 +107,6 @@ export const updateMovie = async (movieId, movieDoc) => {
 //delete movie action
 export const deleteMovie = async (movieId) => {
   try {
-    // console.log("Updating movie with id:", movieId);
-
     const result = await db
       .collection("movies_n")
       .deleteOne({ _id: ObjectId.createFromHexString(movieId) });

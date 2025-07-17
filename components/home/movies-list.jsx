@@ -19,7 +19,7 @@ export default async function MoviesList() {
       {/* Loop movies */}
       {/* {MOVIES.map((movie) => ( */} {/* hardcode */}
       {movies.map((movie, index) => (
-        <div key={`${movie.id}-${index}`}>
+        <div key={`${movie._id}-${index}`}>
           <MovieCard movie={movie}/>
         </div>
       ))}
