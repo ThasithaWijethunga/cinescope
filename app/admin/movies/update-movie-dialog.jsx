@@ -11,7 +11,7 @@ import UpdateMovieForm from "./update-movie-form";
 
 export default function UpdateMovieDialog({open , onOpenChange, movie}) {
 
-  console.log("movie : ", movie);
+  // console.log("movie : ", movie);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">

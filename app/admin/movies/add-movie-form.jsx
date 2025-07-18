@@ -67,7 +67,7 @@ export default function AddMovieForm({ onClose }) {
     setIsSubmitting(false);
 
     if (response?.success) {
-      console.log(response);
+      // console.log(response);
       handleClose();
     }
 

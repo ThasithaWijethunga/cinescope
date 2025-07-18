@@ -9,7 +9,7 @@ export default async function MoviesList() {
     return <div className="text-foreground font-medium text-center py-12"> No movies found</div>;
   }
 
-  console.log("Movies : ", movies);
+  // console.log("Movies : ", movies);
 
   {
     /* Movie card here */

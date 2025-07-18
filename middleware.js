@@ -5,7 +5,7 @@ import { getSessionCookie } from "better-auth/cookies";
 export function middleware(request) {
   // return NextResponse.redirect(new URL('/login', request.url))
   const sessionCookie = getSessionCookie(request);
-  console.log(sessionCookie);
+  // console.log(sessionCookie);
   if (!sessionCookie) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
