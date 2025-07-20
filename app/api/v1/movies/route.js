@@ -2,6 +2,8 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+// export const revalidate = 3600; //Invalidate every hour
+
 export const GET = async () => {
   try {
     const movies = await db

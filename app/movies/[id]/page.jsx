@@ -20,7 +20,17 @@ export default async function MovieDetailsPage(props) {
   //const searchParams = await props.searchParams;
   // console.log( searchParams);
 
+  // Simulate a delay using promise.
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+
+
+
   const movie = await getMovieById(id);
+
+    if (!movie || !movie.data) {
+    // error for demo
+    throw new Error("movies not found");
+  }
 
   return (
     <main className="flex flex-col justify-center py-16 px-4 mx-auto">

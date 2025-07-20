@@ -2,6 +2,8 @@ import HeaderNav from "@/components/header-nav"; // the way this has been import
 import FeaturedMovies from "@/components/home/featured-movies";
 import HeroBanner from "@/components/home/hero-banner";
 
+// export const revalidate = 3600;  //Invalidate every hour
+
 //SSR - Server side Rendered - Server Component
 export default function Home() {
   return (

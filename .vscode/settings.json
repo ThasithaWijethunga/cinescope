@@ -1,5 +1,12 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["credentails", "imdb", "lastupdated", "Openchange"]
+  "cSpell.words": [
+    "CINESCOPE",
+    "credentails",
+    "imdb",
+    "lastupdated",
+    "Openchange",
+    "toploader"
+  ]
 }

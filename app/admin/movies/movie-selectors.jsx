@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useDeferredValue, useEffect, useState, useRef } from "react";
+import { useDebounce } from "use-debounce";
 
 export default function MovieSelectors() {
   const searchParams = useSearchParams();
@@ -25,8 +26,10 @@ export default function MovieSelectors() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [immediateSearchTerm, setImmediateSearchTerm] = useState(searchTerm);
 
-  const deferredSearchTerm = useDeferredValue(immediateSearchTerm);
+  // const deferredSearchTerm = useDeferredValue(immediateSearchTerm);   //Deferred
   const isFirstRender = useRef(true);
+
+  const [debouncedSearchTerm] = useDebounce(immediateSearchTerm, 1000);
 
   const handleMovieSearch = (term) => {
     // // console.log(term);
@@ -46,18 +49,27 @@ export default function MovieSelectors() {
   };
 
   useEffect(() => {
-     if (isFirstRender.current) {
+    if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    const params = new URLSearchParams(searchParams);
+    // const params = new URLSearchParams(searchParams);       //Deferred
+    const params = new URLSearchParams(searchParams.toString());
 
-    deferredSearchTerm
-      ? params.set("query", deferredSearchTerm)
+    // deferredSearchTerm                                         //Deferred
+    //   ? params.set("query", deferredSearchTerm)                //Deferred
+    //   : params.delete("query");                                //Deferred
+
+    // replace(`${pathname}?${params.toString()}`);               //Deferred  
+
+    debouncedSearchTerm
+      ? params.set("query", debouncedSearchTerm)
       : params.delete("query");
 
-    replace(`${pathname}?${params.toString()}`);
-  });
+    if (searchTerm !== debouncedSearchTerm) {
+      replace(`${pathname}?${params.toString()}`);
+    }
+  },[debouncedSearchTerm, pathname, replace]);
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
