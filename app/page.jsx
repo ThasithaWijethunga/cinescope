@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import HeaderNav from "@/components/header-nav"; // the way this has been import is called Alias import
 import FeaturedMovies from "@/components/home/featured-movies";
 import HeroBanner from "@/components/home/hero-banner";
@@ -13,7 +14,8 @@ export default function Home() {
         <HeroBanner />
         <FeaturedMovies />
       </main>
-      <footer className="bg-amber-400 h-72">this is footer</footer>
+      {/* <footer className="bg-amber-400 h-72">this is footer</footer> */}
+      <Footer/>
     </div>
   );
 }
